@@ -84,7 +84,8 @@ db.exec(`
     user_id INTEGER,
     vehicle_id INTEGER,
     quantity INTEGER NOT NULL DEFAULT 1,
-    purchase_price REAL NOT NULL,
+    unit_price REAL NOT NULL,
+    total_amount REAL NOT NULL,
     purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     customer_name TEXT,
     customer_username TEXT,
@@ -100,9 +101,9 @@ db.exec(`
 try {
   // Check if snapshot columns exist with the strict new names
   const purchaseTableInfo = db.prepare('PRAGMA table_info(purchases)').all();
-  const hasSnapshotCols = purchaseTableInfo.some(col => col.name === 'customer_username');
+  const hasTotalAmount = purchaseTableInfo.some(col => col.name === 'total_amount');
   
-  if (!hasSnapshotCols) {
+  if (!hasTotalAmount) {
     db.pragma('foreign_keys = OFF');
     db.exec(`
       DROP TABLE IF EXISTS purchases_new;
@@ -111,7 +112,8 @@ try {
         user_id INTEGER,
         vehicle_id INTEGER,
         quantity INTEGER NOT NULL DEFAULT 1,
-        purchase_price REAL NOT NULL,
+        unit_price REAL NOT NULL,
+        total_amount REAL NOT NULL,
         purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
         customer_name TEXT,
         customer_username TEXT,
@@ -123,8 +125,8 @@ try {
         FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
       );
       
-      INSERT INTO purchases_new (id, user_id, vehicle_id, quantity, purchase_price, purchase_date, customer_name, customer_username, vehicle_name, vehicle_brand, vehicle_type)
-      SELECT p.id, p.user_id, p.vehicle_id, p.quantity, p.purchase_price, p.purchase_date, u.username, u.username, v.model, v.make, v.category
+      INSERT INTO purchases_new (id, user_id, vehicle_id, quantity, unit_price, total_amount, purchase_date, customer_name, customer_username, vehicle_name, vehicle_brand, vehicle_type, vehicle_image)
+      SELECT p.id, p.user_id, p.vehicle_id, p.quantity, p.purchase_price, (p.quantity * p.purchase_price), p.purchase_date, u.username, u.username, v.model, v.make, v.category, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=800&auto=format&fit=crop'
       FROM purchases p
       LEFT JOIN vehicles v ON p.vehicle_id = v.id
       LEFT JOIN users u ON p.user_id = u.id;

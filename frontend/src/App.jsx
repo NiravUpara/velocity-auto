@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import MyGarage from './pages/MyGarage';
 import AdminUsers from './pages/AdminUsers';
+import AdminPurchaseHistory from './pages/AdminPurchaseHistory';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/garage" element={<MyGarage />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/purchase-history" element={<AdminPurchaseHistory />} />
         {/* Redirect unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

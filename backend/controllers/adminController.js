@@ -1,5 +1,5 @@
 const { getAllUsers, getUserById, deleteUser } = require('../models/userModel');
-const { getPurchasesByUserId } = require('../models/purchaseModel');
+const { getPurchasesByUserId, getAllPurchases } = require('../models/purchaseModel');
 const { getAllVehicles } = require('../models/vehicleModel');
 const db = require('../database/db');
 
@@ -77,7 +77,7 @@ function getDashboardStats(req, res) {
     const totalUsers = db.prepare('SELECT COUNT(*) as count FROM users WHERE role != ?').get('admin').count;
 
     const purchaseStats = db.prepare(
-      'SELECT COALESCE(SUM(quantity), 0) as total_purchases, COALESCE(SUM(quantity * purchase_price), 0) as total_revenue FROM purchases'
+      'SELECT COALESCE(SUM(quantity), 0) as total_purchases, COALESCE(SUM(total_amount), 0) as total_revenue FROM purchases'
     ).get();
 
     res.json({
@@ -93,4 +93,38 @@ function getDashboardStats(req, res) {
   }
 }
 
-module.exports = { getUsers, getUserDetails, removeUser, getDashboardStats };
+/**
+ * GET /api/admin/purchase-history
+ * Returns full historical purchase ledger with analytics
+ */
+function getPurchaseHistory(req, res) {
+  try {
+    const purchases = getAllPurchases();
+    
+    // Compute analytics
+    const totalTransactions = purchases.length;
+    const totalRevenue = purchases.reduce((sum, p) => sum + p.total_amount, 0);
+    const averageOrderValue = totalTransactions > 0 ? totalRevenue / totalTransactions : 0;
+    
+    // Compute today's sales
+    const today = new Date().toISOString().split('T')[0];
+    const todaysSales = purchases
+      .filter(p => p.purchase_date.startsWith(today))
+      .reduce((sum, p) => sum + p.total_amount, 0);
+
+    res.json({
+      analytics: {
+        totalRevenue,
+        totalTransactions,
+        todaysSales,
+        averageOrderValue
+      },
+      purchases
+    });
+  } catch (error) {
+    console.error('Purchase history error:', error);
+    res.status(500).json({ error: 'Failed to fetch purchase history' });
+  }
+}
+
+module.exports = { getUsers, getUserDetails, removeUser, getDashboardStats, getPurchaseHistory };

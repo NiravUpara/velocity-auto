@@ -61,6 +61,8 @@ export const getMyPurchases = () => api.get('/purchases/my-garage');
 // Admin API calls
 export const getAdminStats = () => api.get('/admin/stats');
 
+export const getAdminPurchaseHistory = () => api.get('/admin/purchase-history');
+
 export const getAdminUsers = () => api.get('/admin/users');
 
 export const getAdminUserDetails = (id) => api.get(`/admin/users/${id}`);
