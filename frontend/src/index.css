@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+@theme {
+  --color-velocity-bg: var(--bg-main);
+  --color-velocity-surface: var(--bg-surface);
+  --color-velocity-card: var(--bg-card);
+  
+  --color-velocity-text: var(--text-main);
+  --color-velocity-text-muted: var(--text-muted);
+  --color-velocity-border: var(--border-main);
+  --color-velocity-overlay: var(--overlay-main);
+  --color-velocity-input: var(--input-bg);
+
+  --color-velocity-red: #E10600;
+  --color-velocity-blue: #2563EB;
+  --color-velocity-blue-hover: #1D4ED8;
+
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  :root {
+    --bg-main: #050816;
+    --bg-surface: #111827;
+    --bg-card: #1A2235;
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+    --border-main: rgba(255, 255, 255, 0.1);
+    --overlay-main: rgba(0, 0, 0, 0.8);
+    --input-bg: rgba(26, 34, 53, 0.5);
+    --gradient-start: #111827;
+    --gradient-end: #050816;
+  }
+
+
+
+  body {
+    @apply bg-velocity-bg text-white font-inter m-0 p-0 overflow-x-hidden;
+    background-image: radial-gradient(circle at top right, var(--gradient-start) 0%, var(--gradient-end) 60%);
+  }
+}
