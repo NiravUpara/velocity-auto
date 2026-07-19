@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { getUserById } = require('../models/userModel');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
@@ -19,6 +20,13 @@ function authenticate(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // Check if the user still exists in the database
+    const dbUser = getUserById(decoded.id);
+    if (!dbUser) {
+      return res.status(401).json({ error: 'User account no longer exists' });
+    }
+    
     req.user = decoded; // { id, username, role }
     next();
   } catch (error) {

@@ -14,6 +14,24 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Response interceptor: handle 401 errors globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      error.response?.status === 401 && 
+      !window.location.pathname.startsWith('/login') && 
+      window.location.pathname !== '/register' && 
+      window.location.pathname !== '/'
+    ) {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Auth API calls
 export const registerUser = (username, password) =>
   api.post('/auth/register', { username, password });

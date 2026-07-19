@@ -14,6 +14,9 @@ const db = new Database(dbPath);
 // Enable WAL mode for better performance
 db.pragma('journal_mode = WAL');
 
+// Enable Foreign Keys for constraints enforcement
+db.pragma('foreign_keys = ON');
+
 // Create tables if they don't exist
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
@@ -78,14 +81,59 @@ try {
 db.exec(`
   CREATE TABLE IF NOT EXISTS purchases (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    vehicle_id INTEGER NOT NULL,
+    user_id INTEGER,
+    vehicle_id INTEGER,
     quantity INTEGER NOT NULL DEFAULT 1,
     purchase_price REAL NOT NULL,
     purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
+    vehicle_make TEXT,
+    vehicle_model TEXT,
+    vehicle_category TEXT,
+    vehicle_image TEXT,
+    username TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
   )
 `);
+
+try {
+  // Check if snapshot columns exist
+  const purchaseTableInfo = db.prepare('PRAGMA table_info(purchases)').all();
+  const hasSnapshotCols = purchaseTableInfo.some(col => col.name === 'vehicle_make');
+  
+  if (!hasSnapshotCols) {
+    db.pragma('foreign_keys = OFF');
+    db.exec(`
+      DROP TABLE IF EXISTS purchases_new;
+      CREATE TABLE purchases_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        vehicle_id INTEGER,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        purchase_price REAL NOT NULL,
+        purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        vehicle_make TEXT,
+        vehicle_model TEXT,
+        vehicle_category TEXT,
+        vehicle_image TEXT,
+        username TEXT,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
+      );
+      
+      INSERT INTO purchases_new (id, user_id, vehicle_id, quantity, purchase_price, purchase_date, vehicle_make, vehicle_model, vehicle_category, username)
+      SELECT p.id, p.user_id, p.vehicle_id, p.quantity, p.purchase_price, p.purchase_date, v.make, v.model, v.category, u.username
+      FROM purchases p
+      LEFT JOIN vehicles v ON p.vehicle_id = v.id
+      LEFT JOIN users u ON p.user_id = u.id;
+      
+      DROP TABLE purchases;
+      ALTER TABLE purchases_new RENAME TO purchases;
+    `);
+    db.pragma('foreign_keys = ON');
+  }
+} catch (e) {
+  console.error('Purchase migration error:', e);
+}
 
 module.exports = db;
