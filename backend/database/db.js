@@ -86,20 +86,21 @@ db.exec(`
     quantity INTEGER NOT NULL DEFAULT 1,
     purchase_price REAL NOT NULL,
     purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    vehicle_make TEXT,
-    vehicle_model TEXT,
-    vehicle_category TEXT,
+    customer_name TEXT,
+    customer_username TEXT,
+    vehicle_name TEXT,
+    vehicle_brand TEXT,
+    vehicle_type TEXT,
     vehicle_image TEXT,
-    username TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
   )
 `);
 
 try {
-  // Check if snapshot columns exist
+  // Check if snapshot columns exist with the strict new names
   const purchaseTableInfo = db.prepare('PRAGMA table_info(purchases)').all();
-  const hasSnapshotCols = purchaseTableInfo.some(col => col.name === 'vehicle_make');
+  const hasSnapshotCols = purchaseTableInfo.some(col => col.name === 'customer_username');
   
   if (!hasSnapshotCols) {
     db.pragma('foreign_keys = OFF');
@@ -112,17 +113,18 @@ try {
         quantity INTEGER NOT NULL DEFAULT 1,
         purchase_price REAL NOT NULL,
         purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-        vehicle_make TEXT,
-        vehicle_model TEXT,
-        vehicle_category TEXT,
+        customer_name TEXT,
+        customer_username TEXT,
+        vehicle_name TEXT,
+        vehicle_brand TEXT,
+        vehicle_type TEXT,
         vehicle_image TEXT,
-        username TEXT,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
         FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
       );
       
-      INSERT INTO purchases_new (id, user_id, vehicle_id, quantity, purchase_price, purchase_date, vehicle_make, vehicle_model, vehicle_category, username)
-      SELECT p.id, p.user_id, p.vehicle_id, p.quantity, p.purchase_price, p.purchase_date, v.make, v.model, v.category, u.username
+      INSERT INTO purchases_new (id, user_id, vehicle_id, quantity, purchase_price, purchase_date, customer_name, customer_username, vehicle_name, vehicle_brand, vehicle_type)
+      SELECT p.id, p.user_id, p.vehicle_id, p.quantity, p.purchase_price, p.purchase_date, u.username, u.username, v.model, v.make, v.category
       FROM purchases p
       LEFT JOIN vehicles v ON p.vehicle_id = v.id
       LEFT JOIN users u ON p.user_id = u.id;

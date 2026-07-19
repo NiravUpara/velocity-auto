@@ -16,8 +16,8 @@ function createPurchase(userId, vehicleId, quantity, purchasePrice) {
   const vehicleImage = "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=800&auto=format&fit=crop";
 
   const stmt = db.prepare(
-    `INSERT INTO purchases (user_id, vehicle_id, quantity, purchase_price, vehicle_make, vehicle_model, vehicle_category, vehicle_image, username) 
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO purchases (user_id, vehicle_id, quantity, purchase_price, customer_name, customer_username, vehicle_name, vehicle_brand, vehicle_type, vehicle_image) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
   
   const result = stmt.run(
@@ -25,11 +25,12 @@ function createPurchase(userId, vehicleId, quantity, purchasePrice) {
     vehicleId, 
     quantity, 
     purchasePrice,
-    vehicle ? vehicle.make : 'Unknown',
+    user ? user.username : 'Unknown',
+    user ? user.username : 'Unknown',
     vehicle ? vehicle.model : 'Unknown',
+    vehicle ? vehicle.make : 'Unknown',
     vehicle ? vehicle.category : 'Unknown',
-    vehicleImage,
-    user ? user.username : 'Unknown'
+    vehicleImage
   );
   
   return { id: result.lastInsertRowid, userId, vehicleId, quantity, purchasePrice };
@@ -48,9 +49,9 @@ function getPurchasesByUserId(userId) {
       p.purchase_price,
       p.purchase_date,
       p.vehicle_id,
-      p.vehicle_make as make,
-      p.vehicle_model as model,
-      p.vehicle_category as category,
+      p.vehicle_brand as make,
+      p.vehicle_name as model,
+      p.vehicle_type as category,
       p.vehicle_image as image
     FROM purchases p
     WHERE p.user_id = ?
