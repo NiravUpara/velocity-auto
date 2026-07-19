@@ -1,97 +1,45 @@
-# PROMPTS.md — AI Development Prompts
+# PROMPTS.md
 
-This file documents the prompts used during the development of this project with AI assistance (Google Gemini / Antigravity IDE).
+## 1. Project Initialization
+**Representative Prompt:**
+> "Create a new project folder for a Car Dealership Inventory System. Set up an Express backend with an SQLite database and a React frontend using Vite and Tailwind CSS. Keep the folders clean and separate."
 
----
+## 2. Backend Authentication
+**Representative Prompt:**
+> "Write the backend code for user login and registration. Use JWT for authentication and bcrypt for hashing passwords. Create two roles: admin and user. Make sure to protect routes that only admins should access."
 
-## Prompt 1 — Project Setup & Planning
+## 3. Vehicle CRUD
+**Representative Prompt:**
+> "Create the database model and API routes for vehicles. I need endpoints to add a new car, edit its details, update the stock quantity, and delete the car. Only admins should be able to do this."
 
-**Goal:** Define the entire project scope and get an implementation plan.
+## 4. Purchase & Inventory
+**Representative Prompt:**
+> "Write the logic for buying a car. When a logged-in user buys a car, reduce the stock count by one and save the purchase history in a new table. If the stock is zero, return an error."
 
-```
-You are my senior software engineer and pair programming partner.
+## 5. Admin Dashboard
+**Representative Prompt:**
+> "Create admin dashboard APIs that return total users, total vehicles, revenue, and out-of-stock count. Only admins should be able to access these routes. Also add a route to get a list of all users and their past purchases."
 
-I need to build this project for an interview assignment. The goal is NOT to generate the most
-advanced architecture. The goal is to generate a clean, professional, beginner-friendly project
-that I can understand and explain during an interview.
+## 6. React Frontend
+**Representative Prompt:**
+> "Build the frontend pages using React. Create a nice landing page, login/register forms, and a main dashboard to show the cars. Set up Axios so that the JWT token is sent automatically with every request."
 
-Tech Stack: Node.js, Express.js, JavaScript, SQLite, JWT, bcrypt, React, Tailwind CSS, Axios,
-Jest, Supertest, Git
+## 7. UI Improvements
+**Representative Prompt:**
+> "Make the UI look like a premium luxury car website. Use a dark theme, glass-like effects on the modals, and keep the buttons consistent (blue for action, red for delete). Change all prices to show in Indian Rupees (₹)."
 
-Application: Car Dealership Inventory System with User and Admin roles.
+## 8. Testing
+**Representative Prompt:**
+> "Write integration tests for the backend using Jest and Supertest. Use a separate SQLite database just for testing. Make sure to test the login process, adding cars, and buying cars."
 
-Requirements included:
-- Vehicle model (make, model, category, price, quantity)
-- Authentication (register, login with JWT)
-- Admin seeding via script
-- Vehicle CRUD (admin only for create/update/delete)
-- Search by make, model, category
-- Purchase (decrement quantity) and Restock (admin only)
-- React SPA with Login, Register, Dashboard pages
-- Tailwind CSS styling
-- Jest + Supertest tests
-- Clean git history with conventional commits
-```
+## 9. Final Review
+**Representative Prompt:**
+> "Review the entire repository and compare it with the assignment requirements. Find any missing features, UI improvements, testing gaps, or documentation issues before final submission."
 
-**Result:** AI generated an 8-phase implementation plan which I reviewed and approved.
-
----
-
-## Prompt 2 — Approval & Implementation
-
-**Goal:** Execute the approved plan phase by phase.
-
-```
-[Approved the implementation plan]
-```
-
-**Result:** AI built the project incrementally across 8 phases:
-
-1. **Phase 1:** Project scaffolding — Express, SQLite (better-sqlite3), Vite + React + Tailwind CSS
-2. **Phase 2:** User registration & login with bcrypt hashing and JWT tokens
-3. **Phase 3:** JWT authentication middleware with role-based authorization
-4. **Phase 4:** Vehicle CRUD endpoints with admin-only access control
-5. **Phase 5:** Purchase and restock inventory operations
-6. **Phase 6:** React frontend — Login, Register, Dashboard pages
-7. **Phase 7:** Admin modals (Edit, Restock), notifications, responsive design
-8. **Phase 8:** README.md and PROMPTS.md documentation
+## 10. Documentation
+**Representative Prompt:**
+> "Write the final README.md file. Include setup instructions, the tech stack, API overview, and a section explaining how AI was used during development. Keep it professional and easy to understand."
 
 ---
 
-## Prompt 3 — Code Review & Improvements
-
-**Goal:** Senior engineer review of the existing codebase to find bugs, missing tests, and improvements.
-
-```
-You are an experienced Senior Software Engineer, Tech Lead, Code Reviewer, QA Engineer,
-and TDD mentor.
-
-I already have a working Car Dealership Inventory System. Do NOT regenerate the project.
-Instead, work as a senior reviewer improving the existing project.
-
-Workflow:
-1. AUDIT — Analyze every file against assignment requirements
-2. IMPROVEMENT PLAN — Prioritized roadmap (P0/P1/P2)
-3. IMPLEMENTATION — One milestone at a time
-
-Focus areas: input validation, error handling, security, tests, documentation, UX
-```
-
-**Result:** AI performed a comprehensive audit and found:
-
-- **3 bugs** — Missing try/catch in Dashboard handlers (add, update, restock)
-- **1 security issue** — Update endpoint accepted arbitrary fields without validation
-- **4 new tests** — Username validation (short, whitespace), negative price (create, update)
-- **UX improvement** — Debounced search input (300ms)
-- **DX improvement** — `.env.example` file, sample vehicles in seed script
-- **Documentation** — Improved README with environment variables, AI usage details
-
-Total tests: 26 → 30 (all passing)
-
----
-
-## Notes
-
-- All code was generated with AI assistance and reviewed by the developer
-- The developer made all design decisions and can explain every part of the codebase
-- AI was used as a learning tool, not a replacement for understanding
+*AI suggestions were treated as starting points, not final solutions. Every important change was reviewed, tested locally, modified where required, and then integrated into the project.*

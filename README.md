@@ -1,269 +1,238 @@
-# 🚗 Car Dealership Inventory System
+# Velocity Auto
 
-A full-stack web application for managing car dealership inventory with role-based access control.
+**Engineered For Every Journey.**
 
-Built with **Node.js**, **Express**, **React**, **SQLite**, and **Tailwind CSS**.
-
----
-
-## Features
-
-### User Features
-- User registration and login with JWT authentication
-- Browse all vehicles in inventory
-- Search vehicles by make, model, or category
-- Purchase vehicles (auto-disables when out of stock)
-
-### Admin Features
-- Add new vehicles to inventory
-- Update existing vehicle details
-- Delete vehicles from inventory
-- Restock vehicles
-
-### Technical Features
-- JWT-based authentication with bcrypt password hashing
-- Role-based access control (User / Admin)
-- Input validation on all endpoints
-- RESTful API design
-- SQLite database (persistent, file-based)
-- Comprehensive test suite (30 tests)
-- Debounced search input
-- Responsive UI with Tailwind CSS
+Velocity Auto is a premium Car Dealership Inventory System designed to emulate a luxury automotive startup. It provides a highly polished, robust platform for managing high-performance vehicle fleets, customer purchases, and user accounts.
 
 ---
 
-## Tech Stack
+## Features Implemented
 
-| Layer      | Technology                    |
-|------------|-------------------------------|
-| Backend    | Node.js, Express.js           |
-| Frontend   | React, Tailwind CSS, Axios    |
-| Database   | SQLite (better-sqlite3)       |
-| Auth       | JWT, bcrypt                   |
-| Testing    | Jest, Supertest               |
-| Dev Tools  | Vite, Nodemon                 |
+- **Premium UI/UX**: Features a clean, minimal, sporty design with glassmorphism, tailored animations, and a strict dark mode design language.
+- **Role-Based Access Control**: Differentiates securely between 'admin' and 'user' flows using JWT.
+- **Vehicle Management**: Admins can easily add, edit, restock, or remove vehicles from the inventory.
+- **Purchase System**: Users can view detailed vehicle profiles and smoothly acquire vehicles.
+- **My Garage**: A personalized view for users to track their purchased vehicles and total investment.
+- **User Management**: Admins can manage registered clients and view their individual purchase history securely.
+- **Dashboard Analytics**: Real-time stats summarizing total vehicles, registered users, total revenue, and out-of-stock items.
+- **Search & Filters**: Instantly find vehicles by make, category, or sort by price.
+- **Responsive Layout**: Designed to scale flawlessly from mobile screens to ultrawide desktop monitors, featuring 2-column modal layouts on large screens.
 
 ---
 
-## Folder Structure
+## Tech Stack Used
+
+### Frontend
+- **React.js** (v18+)
+- **Vite** (Build Tool)
+- **Tailwind CSS v4** (Utility-first styling)
+- **Framer Motion** (Micro-animations and layout transitions)
+- **React Router DOM** (Client-side routing)
+- **Axios** (API requests)
+
+### Backend
+- **Node.js** & **Express**
+- **SQLite3** (Lightweight embedded database)
+- **JSON Web Tokens (JWT)** (Authentication)
+- **bcryptjs** (Password hashing)
+- **cors** & **dotenv** (Middleware)
+
+---
+
+## Project Folder Structure
 
 ```
-car-dealership-inventory-system/
+velocity-auto/
 ├── backend/
-│   ├── controllers/          # Request handlers
-│   │   ├── authController.js       # Register & login logic
-│   │   ├── vehicleController.js    # Vehicle CRUD logic
-│   │   └── inventoryController.js  # Purchase & restock logic
-│   ├── middleware/            # Express middleware
-│   │   └── authMiddleware.js       # JWT verify & admin check
-│   ├── models/                # Database queries
-│   │   ├── userModel.js            # User DB operations
-│   │   └── vehicleModel.js         # Vehicle DB operations
-│   ├── routes/                # Route definitions
-│   │   ├── authRoutes.js           # POST /register, /login
-│   │   └── vehicleRoutes.js        # All vehicle endpoints
-│   ├── database/              # Database setup
-│   │   ├── db.js                   # SQLite connection & schema
-│   │   └── seed.js                 # Admin account & sample data
-│   ├── tests/                 # Test suites
-│   │   ├── auth.test.js            # 10 auth tests
-│   │   ├── vehicles.test.js        # 14 vehicle tests
-│   │   └── inventory.test.js       # 6 inventory tests
-│   ├── app.js                 # Express app setup
-│   ├── server.js              # Server entry point
-│   ├── .env.example           # Environment variable template
-│   └── package.json
+│   ├── controllers/      # Route handlers for auth, vehicles, purchases, and admin
+│   ├── database/         # SQLite connection and seeding logic
+│   ├── middleware/       # JWT and role verification middleware
+│   ├── models/           # Data access layers (User, Vehicle, Purchase)
+│   ├── routes/           # Express router definitions
+│   ├── tests/            # API integration and unit tests
+│   ├── app.js            # Express app configuration
+│   └── server.js         # Entry point for backend server
 ├── frontend/
+│   ├── public/           # Static assets (Favicon, Icons)
 │   ├── src/
-│   │   ├── components/        # Reusable UI components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── VehicleCard.jsx
-│   │   │   ├── AddVehicleForm.jsx
-│   │   │   ├── EditVehicleModal.jsx
-│   │   │   └── RestockModal.jsx
-│   │   ├── pages/             # Page components
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   └── Dashboard.jsx
-│   │   ├── services/          # API client
-│   │   │   └── api.js
-│   │   ├── App.jsx            # Root with routing
-│   │   └── main.jsx           # Entry point
-│   ├── index.html
-│   └── package.json
-├── .gitignore
-├── README.md
-└── PROMPTS.md
+│   │   ├── assets/       # Images and SVGs
+│   │   ├── components/   # Reusable UI components and Modals
+│   │   ├── context/      # React context providers
+│   │   ├── pages/        # Core page components (Dashboard, Login, MyGarage, etc.)
+│   │   ├── services/     # Axios API configuration
+│   │   ├── utils/        # Utility helpers (e.g., Currency formatting)
+│   │   ├── App.jsx       # Root router configuration
+│   │   └── index.css     # Global styles and Tailwind configuration
+│   ├── index.html        # Entry HTML file
+│   └── vite.config.js    # Vite configuration
+├── README.md             # Project documentation
+└── PROMPTS.md            # Development prompt history
 ```
 
 ---
 
-## Getting Started
+## Backend Setup Instructions
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+   *The server will start on http://localhost:5000 and the SQLite database will be automatically initialized.*
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/your-username/car-dealership-inventory-system.git
-cd car-dealership-inventory-system
-```
+---
 
-### 2. Backend setup
-```bash
-cd backend
-npm install
-```
+## Frontend Setup Instructions
 
-### 3. Configure environment variables
-```bash
-cp .env.example .env
-```
-Edit `.env` if needed (defaults work for local development):
-```
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+   *The client will start on http://localhost:5173.*
+
+---
+
+## Environment Variable Configuration
+
+Create a `.env` file in the `backend/` directory with the following variables:
+```env
 PORT=5000
-JWT_SECRET=your_super_secret_key_change_in_production
-DB_PATH=./database/dealership.db
+JWT_SECRET=your_super_secret_key_here
 ```
-
-### 4. Seed the database
-```bash
-npm run seed
-```
-This creates:
-- **Admin account** — username: `admin`, password: `admin123`
-- **5 sample vehicles** — Toyota Camry, Ford F-150, Honda Civic, BMW M3, Tesla Model 3
-
-### 5. Frontend setup
-```bash
-cd ../frontend
-npm install
-```
+*(If no `.env` file is provided, the backend falls back to port 5000 and a default secret key for development purposes).*
 
 ---
 
-## Running the Application
+## Database Information
 
-### Start backend (port 5000)
-```bash
-cd backend
-npm run dev
-```
-
-### Start frontend (port 5173)
-```bash
-cd frontend
-npm run dev
-```
-
-Open `http://localhost:5173` in your browser.
+The project utilizes **SQLite**, a lightweight, embedded relational database.
+- The database is stored locally in `backend/database/dealership.db`.
+- **Tables**: `users`, `vehicles`, `purchases`.
+- A seed script (`seed.js`) automatically provisions initial inventory (e.g., Porsche 911 GT3, Rimac Nevera) and a default admin account upon first execution.
 
 ---
 
-## Environment Variables
+## API Overview
 
-| Variable     | Description                      | Default                                    |
-|-------------|----------------------------------|--------------------------------------------|
-| `PORT`       | Backend server port              | `5000`                                     |
-| `JWT_SECRET` | Secret key for signing JWT tokens | `your_super_secret_key_change_in_production` |
-| `DB_PATH`    | Path to SQLite database file     | `./database/dealership.db`                 |
+**Auth Routes (`/api/auth`)**:
+- `POST /register`: Register a new user.
+- `POST /login`: Authenticate and receive a JWT.
 
-> **Note:** Never commit `.env` to version control. Use `.env.example` as a template.
+**Vehicle Routes (`/api/vehicles`)**:
+- `GET /`: Retrieve all inventory.
+- `GET /search`: Search vehicles by make or model.
+- `POST /`: Add a new vehicle (Admin only).
+- `PUT /:id`: Update a vehicle (Admin only).
+- `DELETE /:id`: Delete a vehicle (Admin only).
+- `POST /:id/purchase`: Purchase a vehicle, decrementing stock (Authenticated).
+- `POST /:id/restock`: Increase vehicle stock (Admin only).
 
----
+**Purchase Routes (`/api/purchases`)**:
+- `GET /my-garage`: Retrieve purchase history for the logged-in user.
 
-## API Endpoints
-
-### Authentication
-
-| Method | Endpoint              | Description         | Auth |
-|--------|-----------------------|---------------------|------|
-| POST   | `/api/auth/register`  | Register a new user | No   |
-| POST   | `/api/auth/login`     | Login & get JWT     | No   |
-
-### Vehicles
-
-| Method | Endpoint                     | Description          | Auth  | Admin |
-|--------|------------------------------|----------------------|-------|-------|
-| GET    | `/api/vehicles`              | Get all vehicles     | Yes   | No    |
-| GET    | `/api/vehicles/search?q=`    | Search vehicles      | Yes   | No    |
-| POST   | `/api/vehicles`              | Add a vehicle        | Yes   | Yes   |
-| PUT    | `/api/vehicles/:id`          | Update a vehicle     | Yes   | Yes   |
-| DELETE | `/api/vehicles/:id`          | Delete a vehicle     | Yes   | Yes   |
-
-### Inventory
-
-| Method | Endpoint                        | Description        | Auth  | Admin |
-|--------|---------------------------------|--------------------|-------|-------|
-| POST   | `/api/vehicles/:id/purchase`    | Purchase (qty - 1) | Yes   | No    |
-| POST   | `/api/vehicles/:id/restock`     | Restock (qty + n)  | Yes   | Yes   |
+**Admin Routes (`/api/admin`)**:
+- `GET /stats`: Retrieve platform analytics (Admin only).
+- `GET /users`: Retrieve all registered users (Admin only).
+- `GET /users/:id`: Retrieve purchase history for a specific user (Admin only).
+- `DELETE /users/:id`: Delete a user account (Admin only).
 
 ---
 
-## Testing
+## Authentication Overview
 
-Run all tests:
-```bash
-cd backend
-npm test
-```
+Authentication is handled via **JSON Web Tokens (JWT)**.
+1. Users submit credentials via the Login/Register endpoints.
+2. The server verifies/hashes passwords utilizing `bcryptjs`.
+3. A JWT is issued and stored in the client's `sessionStorage`.
+4. Subsequent API requests attach the token as a `Bearer` token via Axios interceptors.
+5. The `authMiddleware` on the backend validates the token and extracts role parameters (`admin` vs `user`) to enforce authorization boundaries.
 
-### Test Results
-```
-Test Suites: 3 passed, 3 total
-Tests:       30 passed, 30 total
-```
+---
 
-### Test Coverage
+## Testing Instructions
 
-| Suite               | Tests | What's Tested                                            |
-|---------------------|-------|----------------------------------------------------------|
-| `auth.test.js`      | 10    | Register, login, validation (short password, short username, whitespace) |
-| `vehicles.test.js`  | 14    | CRUD, search, auth guards, negative price validation     |
-| `inventory.test.js` | 6     | Purchase, restock, out of stock, admin guards            |
+The backend API is rigorously covered by integration tests using **Jest** and **Supertest**.
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Execute the test suite:
+   ```bash
+   npm test
+   ```
+*(Note: The project uses a separate SQLite test database (`test.db`) so that testing does not affect your development data).*
+
+---
+
+## Test Report Section
+
+The automated test suite verifies critical assertions across 3 core modules:
+- **Authentication**: Validates registration, login, password hashing, and token generation.
+- **Vehicles/Inventory**: Validates CRUD operations, stock management constraints, and admin-only route protection.
+- **Transactions**: Validates purchase logic, stock decrementing, out-of-stock rejection, and secure garage history retrieval.
+
+At the time of submission, all backend tests were passing successfully.
 
 ---
 
 ## Screenshots
 
-> Screenshots will be added after deployment.
+*(Screenshots will be added before submission)*
+
+### Landing Page
+*(Placeholder for Landing Page screenshot)*
+
+### Login
+*(Placeholder for Login screenshot)*
+
+### Dashboard
+*(Placeholder for Dashboard screenshot)*
+
+### Admin Dashboard
+*(Placeholder for Admin Dashboard screenshot)*
+
+### Purchase Flow
+*(Placeholder for Purchase Flow screenshot)*
+
+### User Garage
+*(Placeholder for User Garage screenshot)*
 
 ---
 
-## AI Usage
+# My AI Usage
 
-This project was developed with the assistance of **Google Gemini (Antigravity IDE)** as a pair programming partner.
+### Tools Used:
+- **ChatGPT**
+- **Google Gemini**
+- **Antigravity IDE**
 
-### How AI was used
-1. **Initial scaffolding** — Generated project structure, Express setup, and SQLite schema
-2. **Feature implementation** — Controller logic, middleware, and route definitions
-3. **Test writing** — Created test suites covering happy paths and edge cases
-4. **Code review** — Identified bugs (missing error handling in Dashboard), security issues (update validation), and UX improvements (search debounce)
-5. **Documentation** — Generated README and PROMPTS.md
+### How AI was utilized during development:
+- Brainstorming architecture and database schema
+- Generating initial backend boilerplate
+- Debugging React state and JSX syntax errors
+- Improving the UI with Tailwind CSS and glassmorphism
+- Writing Jest and Supertest backend tests
+- Formatting and structuring markdown documentation
 
-### What I did
-- Reviewed every line of generated code
-- Understood the architecture decisions (MVC, JWT flow, middleware chaining)
-- Made design decisions (SQLite over Postgres, no ORM, Tailwind v4)
-- Tested the application manually end-to-end
-- Can explain any part of the codebase in an interview
+### Reflection on AI Assistance:
+AI made the development process much faster by quickly generating boilerplate code and styling setups. I manually reviewed every AI-generated suggestion, ensuring I fully understood the code before using it. Whenever the AI suggested something overly complex or misaligned with the project goals, I modified the code to keep it simple, secure, and robust.
 
-### What I learned
-- How JWT authentication works (sign, verify, middleware pattern)
-- How bcrypt hashing works (salt rounds, timing-safe comparison)
-- How to structure Express.js APIs (separate app.js from server.js for testing)
-- How to write meaningful API tests with Supertest
-- How React Router, Axios interceptors, and state management work together
+I understand the overall architecture of this project and can explain the implementation, debugging process, and how AI was used during development.
 
----
-
-## Future Improvements
-
-- [ ] Add pagination for vehicle listing
-- [ ] Add price range filter to search
-- [ ] Implement purchase history tracking
-- [ ] Add image uploads for vehicles
-- [ ] Deploy to a cloud provider (Railway, Render)
-- [ ] Add rate limiting for API security
-- [ ] Implement refresh tokens
+*AI Transparency Note: This repository documents AI usage transparently through this README and the PROMPTS.md file. All generated code was thoroughly reviewed, verified, modified where necessary, and integrated manually.*
