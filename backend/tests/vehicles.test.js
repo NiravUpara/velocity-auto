@@ -2,18 +2,22 @@ const request = require('supertest');
 const app = require('../app');
 const db = require('../database/db');
 
+// Valid password that meets all requirements
+const VALID_PASSWORD = 'Test@1234';
+
 let adminToken;
 let userToken;
 
 // Before all tests: create an admin and a regular user, get their tokens
 beforeAll(async () => {
   // Clean tables
+  db.exec('DELETE FROM purchases');
   db.exec('DELETE FROM vehicles');
   db.exec('DELETE FROM users');
 
   // Register admin (manually insert with admin role)
   const bcrypt = require('bcrypt');
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const hashedPassword = await bcrypt.hash(VALID_PASSWORD, 10);
   db.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run(
     'admin', hashedPassword, 'admin'
   );
@@ -21,18 +25,19 @@ beforeAll(async () => {
   // Login as admin to get token
   const adminRes = await request(app)
     .post('/api/auth/login')
-    .send({ username: 'admin', password: 'admin123' });
+    .send({ username: 'admin', password: VALID_PASSWORD });
   adminToken = adminRes.body.token;
 
   // Register a regular user
   const userRes = await request(app)
     .post('/api/auth/register')
-    .send({ username: 'testuser', password: 'password123' });
+    .send({ username: 'testuser', password: VALID_PASSWORD });
   userToken = userRes.body.token;
 });
 
-// Clean vehicles table before each test
+// Clean tables before each test
 beforeEach(() => {
+  db.exec('DELETE FROM purchases');
   db.exec('DELETE FROM vehicles');
 });
 
@@ -89,7 +94,6 @@ describe('POST /api/vehicles (Create)', () => {
   });
 
   // Test 4: Negative price should fail validation
-  // Price and quantity must be non-negative numbers
   it('should return 400 for negative price', async () => {
     const res = await request(app)
       .post('/api/vehicles')
@@ -97,12 +101,23 @@ describe('POST /api/vehicles (Create)', () => {
       .send({ make: 'Toyota', model: 'Camry', category: 'Sedan', price: -1000, quantity: 5 });
 
     expect(res.status).toBe(400);
-    expect(res.body.error).toBe('Price and quantity must be non-negative');
+    expect(res.body.error).toBe('Price must be greater than 0');
+  });
+
+  // Test 5: Zero price should fail validation
+  it('should return 400 for zero price', async () => {
+    const res = await request(app)
+      .post('/api/vehicles')
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ make: 'Toyota', model: 'Camry', category: 'Sedan', price: 0, quantity: 5 });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('Price must be greater than 0');
   });
 });
 
 describe('GET /api/vehicles (Read)', () => {
-  // Test 4: Get all vehicles
+  // Test 6: Get all vehicles
   it('should return all vehicles', async () => {
     // Seed a vehicle first
     db.prepare('INSERT INTO vehicles (make, model, category, price, quantity) VALUES (?, ?, ?, ?, ?)')
@@ -118,7 +133,7 @@ describe('GET /api/vehicles (Read)', () => {
     expect(res.body[0].make).toBe('Honda');
   });
 
-  // Test 5: Unauthenticated users cannot view vehicles
+  // Test 7: Unauthenticated users cannot view vehicles
   it('should return 401 without a token', async () => {
     const res = await request(app).get('/api/vehicles');
 
@@ -135,7 +150,7 @@ describe('GET /api/vehicles/search', () => {
       .run('Ford', 'F-150', 'Truck', 35000, 5);
   });
 
-  // Test 6: Search by make
+  // Test 8: Search by make
   it('should find vehicles matching the search query', async () => {
     const res = await request(app)
       .get('/api/vehicles/search?q=Toyota')
@@ -146,7 +161,7 @@ describe('GET /api/vehicles/search', () => {
     expect(res.body[0].make).toBe('Toyota');
   });
 
-  // Test 7: Search with no results
+  // Test 9: Search with no results
   it('should return empty array for no matches', async () => {
     const res = await request(app)
       .get('/api/vehicles/search?q=BMW')
@@ -156,7 +171,7 @@ describe('GET /api/vehicles/search', () => {
     expect(res.body.length).toBe(0);
   });
 
-  // Test 8: Search by category
+  // Test 10: Search by category
   it('should search by category', async () => {
     const res = await request(app)
       .get('/api/vehicles/search?q=Truck')
@@ -169,9 +184,8 @@ describe('GET /api/vehicles/search', () => {
 });
 
 describe('PUT /api/vehicles/:id (Update)', () => {
-  // Test 9: Admin can update a vehicle
+  // Test 11: Admin can update a vehicle
   it('should allow admin to update a vehicle', async () => {
-    // Create a vehicle
     const created = await request(app)
       .post('/api/vehicles')
       .set('Authorization', `Bearer ${adminToken}`)
@@ -186,7 +200,7 @@ describe('PUT /api/vehicles/:id (Update)', () => {
     expect(res.body.price).toBe(27000);
   });
 
-  // Test 10: Update non-existent vehicle
+  // Test 12: Update non-existent vehicle
   it('should return 404 for non-existent vehicle', async () => {
     const res = await request(app)
       .put('/api/vehicles/9999')
@@ -196,8 +210,7 @@ describe('PUT /api/vehicles/:id (Update)', () => {
     expect(res.status).toBe(404);
   });
 
-  // Test 11: Update with negative price should fail
-  // Validates that the update endpoint doesn't accept invalid values
+  // Test 13: Update with negative price should fail
   it('should return 400 for negative price', async () => {
     const created = await request(app)
       .post('/api/vehicles')
@@ -210,12 +223,12 @@ describe('PUT /api/vehicles/:id (Update)', () => {
       .send({ price: -5000 });
 
     expect(res.status).toBe(400);
-    expect(res.body.error).toBe('Price must be non-negative');
+    expect(res.body.error).toBe('Price must be greater than 0');
   });
 });
 
 describe('DELETE /api/vehicles/:id', () => {
-  // Test 11: Admin can delete a vehicle
+  // Test 14: Admin can delete a vehicle
   it('should allow admin to delete a vehicle', async () => {
     const created = await request(app)
       .post('/api/vehicles')
@@ -230,7 +243,7 @@ describe('DELETE /api/vehicles/:id', () => {
     expect(res.body.message).toBe('Vehicle deleted successfully');
   });
 
-  // Test 12: Regular user cannot delete a vehicle
+  // Test 15: Regular user cannot delete a vehicle
   it('should deny regular user from deleting', async () => {
     const created = await request(app)
       .post('/api/vehicles')
