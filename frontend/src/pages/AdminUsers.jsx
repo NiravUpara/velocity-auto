@@ -109,7 +109,13 @@ function AdminUsers() {
           </div>
         ) : users.length === 0 ? (
           <div className="text-center py-24 bg-velocity-surface/30 border border-white/5 rounded-2xl">
-            <p className="text-gray-400 text-xl font-orbitron">No registered users</p>
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
+              <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <p className="text-white text-xl font-orbitron font-bold mb-2">No registered users yet.</p>
+            <p className="text-gray-400">Users will appear here after creating an account.</p>
           </div>
         ) : (
           <div className="bg-velocity-surface/50 border border-white/5 rounded-2xl overflow-hidden">
@@ -124,7 +130,7 @@ function AdminUsers() {
                 </tr>
               </thead>
               <tbody>
-                {users.filter(u => u.role !== 'admin').map((u) => (
+                {users.map((u) => (
                   <tr key={u.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                     <td className="px-6 py-4 text-white font-medium">{u.username}</td>
                     <td className="px-6 py-4 hidden sm:table-cell">

@@ -74,7 +74,7 @@ function getDashboardStats(req, res) {
     const totalVehicles = vehicles.length;
     const outOfStock = vehicles.filter(v => v.quantity === 0).length;
 
-    const totalUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
+    const totalUsers = db.prepare('SELECT COUNT(*) as count FROM users WHERE role != ?').get('admin').count;
 
     const purchaseStats = db.prepare(
       'SELECT COALESCE(SUM(quantity), 0) as total_purchases, COALESCE(SUM(quantity * purchase_price), 0) as total_revenue FROM purchases'

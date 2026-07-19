@@ -313,10 +313,15 @@ function Dashboard() {
             <p className="text-gray-400 mt-6 font-orbitron tracking-widest uppercase">Loading Fleet...</p>
           </div>
         ) : processedVehicles.length === 0 ? (
-          <div className="text-center py-24">
-            <p className="text-gray-400 text-xl font-orbitron">No machines found</p>
-            <p className="text-gray-400 opacity-80 text-sm mt-3">
-              {searchQuery || selectedMakes.length > 0 || selectedCategories.length > 0 ? 'Adjust your search parameters' : 'The premium collection is currently empty'}
+          <div className="text-center py-24 bg-velocity-surface/30 border border-white/5 rounded-2xl">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-6">
+              <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <p className="text-white text-xl font-orbitron font-bold mb-2">No machines found</p>
+            <p className="text-gray-400">
+              {searchQuery || selectedMakes.length > 0 || selectedCategories.length > 0 ? 'Adjust your search parameters to find what you are looking for.' : 'The premium collection is currently empty.'}
             </p>
           </div>
         ) : (

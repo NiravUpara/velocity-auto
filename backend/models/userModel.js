@@ -39,6 +39,7 @@ function getAllUsers() {
       COALESCE(SUM(p.quantity), 0) as total_purchases
     FROM users u
     LEFT JOIN purchases p ON u.id = p.user_id
+    WHERE u.role != 'admin'
     GROUP BY u.id
     ORDER BY u.created_at DESC
   `).all();
