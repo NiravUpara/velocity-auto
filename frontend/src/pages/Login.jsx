@@ -17,9 +17,9 @@ function Login() {
     try {
       const res = await loginUser(username, password);
 
-      // Store token and user info in localStorage
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      // Store token and user info in sessionStorage
+      sessionStorage.setItem('token', res.data.token);
+      sessionStorage.setItem('user', JSON.stringify(res.data.user));
 
       navigate('/dashboard');
     } catch (err) {
@@ -30,27 +30,35 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-velocity-bg flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background Gradients */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-velocity-surface/50 via-velocity-bg to-velocity-bg z-0"></div>
+      
+      <div className="w-full max-w-md relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">🚗 Car Dealership</h1>
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-block hover:opacity-80 transition-opacity mb-6">
+            <span className="font-orbitron font-bold text-3xl tracking-wider text-white">
+              VELOCITY<span className="text-blue-600">AUTO</span>
+            </span>
+          </Link>
+          <h1 className="text-2xl font-bold text-white mb-2 font-orbitron">Welcome Back</h1>
           <p className="text-gray-400">Sign in to your account</p>
         </div>
 
         {/* Login Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 shadow-2xl"
+          className="bg-velocity-surface/80 backdrop-blur-md border border-white/5 rounded-2xl p-8 shadow-2xl"
         >
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
+            <div className="bg-velocity-red/10 border border-velocity-red/30 text-velocity-red px-4 py-3 rounded-lg mb-6 text-sm">
               {error}
             </div>
           )}
 
           <div className="mb-5">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-400 mb-2 font-orbitron tracking-wide">
               Username
             </label>
             <input
@@ -58,14 +66,14 @@ function Login() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-velocity-card/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Enter your username"
               required
             />
           </div>
 
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+          <div className="mb-8">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2 font-orbitron tracking-wide">
               Password
             </label>
             <input
@@ -73,7 +81,7 @@ function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-velocity-card/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Enter your password"
               required
             />
@@ -82,15 +90,15 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-semibold rounded-lg transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-bold uppercase tracking-widest rounded-lg transition-all duration-300 cursor-pointer disabled:cursor-not-allowed shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Authenticating...' : 'Sign In'}
           </button>
 
-          <p className="text-center text-gray-400 mt-6 text-sm">
+          <p className="text-center text-gray-400 mt-8 text-sm">
             Don't have an account?{' '}
-            <Link to="/register" className="text-blue-400 hover:text-blue-300 transition-colors">
-              Register here
+            <Link to="/register" className="text-velocity-blue hover:text-blue-300 transition-colors font-medium">
+              Become a Member
             </Link>
           </p>
         </form>

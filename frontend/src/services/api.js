@@ -7,7 +7,7 @@ const api = axios.create({
 
 // Request interceptor: automatically attach JWT token to every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -32,9 +32,21 @@ export const updateVehicle = (id, vehicleData) => api.put(`/vehicles/${id}`, veh
 
 export const deleteVehicle = (id) => api.delete(`/vehicles/${id}`);
 
-export const purchaseVehicle = (id) => api.post(`/vehicles/${id}/purchase`);
+export const purchaseVehicle = (id, quantity = 1) => api.post(`/vehicles/${id}/purchase`, { quantity });
 
 export const restockVehicle = (id, quantity) =>
   api.post(`/vehicles/${id}/restock`, { quantity });
+
+// Purchase API calls
+export const getMyPurchases = () => api.get('/purchases/my-garage');
+
+// Admin API calls
+export const getAdminStats = () => api.get('/admin/stats');
+
+export const getAdminUsers = () => api.get('/admin/users');
+
+export const getAdminUserDetails = (id) => api.get(`/admin/users/${id}`);
+
+export const deleteAdminUser = (id) => api.delete(`/admin/users/${id}`);
 
 export default api;

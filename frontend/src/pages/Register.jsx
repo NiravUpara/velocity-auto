@@ -10,11 +10,33 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Password strength validation
+  const validatePassword = (pwd) => {
+    if (pwd.length < 8) return 'Password must be at least 8 characters';
+    if (!/[A-Z]/.test(pwd)) return 'Password must contain at least one uppercase letter';
+    if (!/[0-9]/.test(pwd)) return 'Password must contain at least one digit';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return 'Password must contain at least one special character';
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Client-side validation
+    // Username validation
+    if (username.trim().length < 3) {
+      setError('Username must be at least 3 characters');
+      return;
+    }
+
+    // Password strength check
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    // Confirm password check
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -32,28 +54,46 @@ function Register() {
     }
   };
 
+  // Password strength indicators
+  const getStrengthChecks = () => {
+    return [
+      { label: 'At least 8 characters', met: password.length >= 8 },
+      { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
+      { label: 'One digit', met: /[0-9]/.test(password) },
+      { label: 'One special character', met: /[!@#$%^&*(),.?":{}|<>]/.test(password) },
+    ];
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-velocity-bg flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background Gradients */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-velocity-surface/50 via-velocity-bg to-velocity-bg z-0"></div>
+      
+      <div className="w-full max-w-md relative z-10 my-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">🚗 Car Dealership</h1>
-          <p className="text-gray-400">Create your account</p>
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-block hover:opacity-80 transition-opacity mb-6">
+            <span className="font-orbitron font-bold text-3xl tracking-wider text-white">
+              VELOCITY<span className="text-blue-600">AUTO</span>
+            </span>
+          </Link>
+          <h1 className="text-2xl font-bold text-white mb-2 font-orbitron">Join The Club</h1>
+          <p className="text-gray-400">Create your premium account</p>
         </div>
 
         {/* Register Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 shadow-2xl"
+          className="bg-velocity-surface/80 backdrop-blur-md border border-white/5 rounded-2xl p-8 shadow-2xl"
         >
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
+            <div className="bg-velocity-red/10 border border-velocity-red/30 text-velocity-red px-4 py-3 rounded-lg mb-6 text-sm">
               {error}
             </div>
           )}
 
           <div className="mb-5">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-400 mb-2 font-orbitron tracking-wide">
               Username
             </label>
             <input
@@ -61,14 +101,14 @@ function Register() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="Choose a username"
+              className="w-full px-4 py-3 bg-velocity-card/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="Choose a username (min 3 chars)"
               required
             />
           </div>
 
           <div className="mb-5">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-400 mb-2 font-orbitron tracking-wide">
               Password
             </label>
             <input
@@ -76,14 +116,29 @@ function Register() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="At least 6 characters"
+              className="w-full px-4 py-3 bg-velocity-card/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="Create a strong password"
               required
             />
+            {/* Password strength indicators */}
+            {password.length > 0 && (
+              <div className="mt-3 space-y-1">
+                {getStrengthChecks().map((check) => (
+                  <div key={check.label} className="flex items-center gap-2 text-xs">
+                    <span className={check.met ? 'text-green-400' : 'text-gray-500'}>
+                      {check.met ? '✓' : '○'}
+                    </span>
+                    <span className={check.met ? 'text-green-400' : 'text-gray-500'}>
+                      {check.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="mb-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+          <div className="mb-8">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-400 mb-2 font-orbitron tracking-wide">
               Confirm Password
             </label>
             <input
@@ -91,24 +146,27 @@ function Register() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-velocity-card/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Confirm your password"
               required
             />
+            {confirmPassword.length > 0 && password !== confirmPassword && (
+              <p className="text-velocity-red text-xs mt-2">Passwords do not match</p>
+            )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-semibold rounded-lg transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-bold uppercase tracking-widest rounded-lg transition-all duration-300 cursor-pointer disabled:cursor-not-allowed shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
 
-          <p className="text-center text-gray-400 mt-6 text-sm">
+          <p className="text-center text-gray-400 mt-8 text-sm">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-400 hover:text-blue-300 transition-colors">
-              Sign in here
+            <Link to="/login" className="text-velocity-blue hover:text-blue-300 transition-colors font-medium">
+              Sign In
             </Link>
           </p>
         </form>
