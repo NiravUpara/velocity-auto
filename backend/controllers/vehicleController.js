@@ -45,18 +45,22 @@ function search(req, res) {
  */
 function create(req, res) {
   try {
-    const { make, model, category, price, quantity } = req.body;
+    const { make, model, category, price, quantity, description } = req.body;
 
     // Validate all required fields
     if (!make || !model || !category || price == null || quantity == null) {
       return res.status(400).json({ error: 'All fields are required: make, model, category, price, quantity' });
     }
 
-    if (price < 0 || quantity < 0) {
-      return res.status(400).json({ error: 'Price and quantity must be non-negative' });
+    if (price <= 0) {
+      return res.status(400).json({ error: 'Price must be greater than 0' });
     }
 
-    const vehicle = createVehicle(make, model, category, price, quantity);
+    if (quantity < 0) {
+      return res.status(400).json({ error: 'Quantity cannot be negative' });
+    }
+
+    const vehicle = createVehicle(make, model, category, price, quantity, description);
     res.status(201).json(vehicle);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create vehicle' });
@@ -70,7 +74,7 @@ function create(req, res) {
 function update(req, res) {
   try {
     const { id } = req.params;
-    const { make, model, category, price, quantity } = req.body;
+    const { make, model, category, price, quantity, description } = req.body;
 
     // Only allow known fields to be updated
     const fields = {};
@@ -79,10 +83,11 @@ function update(req, res) {
     if (category !== undefined) fields.category = category;
     if (price !== undefined) fields.price = price;
     if (quantity !== undefined) fields.quantity = quantity;
+    if (description !== undefined) fields.description = description;
 
     // Validate numeric fields if provided
-    if (price !== undefined && price < 0) {
-      return res.status(400).json({ error: 'Price must be non-negative' });
+    if (price !== undefined && price <= 0) {
+      return res.status(400).json({ error: 'Price must be greater than 0' });
     }
     if (quantity !== undefined && quantity < 0) {
       return res.status(400).json({ error: 'Quantity must be non-negative' });

@@ -34,12 +34,12 @@ function getVehicleById(id) {
  * Create a new vehicle.
  * @returns {object} The created vehicle
  */
-function createVehicle(make, model, category, price, quantity) {
+function createVehicle(make, model, category, price, quantity, description) {
   const stmt = db.prepare(
-    'INSERT INTO vehicles (make, model, category, price, quantity) VALUES (?, ?, ?, ?, ?)'
+    'INSERT INTO vehicles (make, model, category, price, quantity, description) VALUES (?, ?, ?, ?, ?, ?)'
   );
-  const result = stmt.run(make, model, category, price, quantity);
-  return { id: result.lastInsertRowid, make, model, category, price, quantity };
+  const result = stmt.run(make, model, category, price, quantity, description);
+  return { id: result.lastInsertRowid, make, model, category, price, quantity, description };
 }
 
 /**
@@ -54,8 +54,8 @@ function updateVehicle(id, fields) {
 
   const updated = { ...vehicle, ...fields };
   db.prepare(
-    'UPDATE vehicles SET make = ?, model = ?, category = ?, price = ?, quantity = ? WHERE id = ?'
-  ).run(updated.make, updated.model, updated.category, updated.price, updated.quantity, id);
+    'UPDATE vehicles SET make = ?, model = ?, category = ?, price = ?, quantity = ?, description = ? WHERE id = ?'
+  ).run(updated.make, updated.model, updated.category, updated.price, updated.quantity, updated.description, id);
 
   return updated;
 }
