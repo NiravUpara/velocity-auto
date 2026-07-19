@@ -99,7 +99,7 @@ function AdminPurchaseHistory() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-4xl font-bold font-orbitron text-white">Purchase History</h1>
-            <p className="text-gray-400 mt-1">Immutable sales ledger of all completed transactions</p>
+            <p className="text-gray-400 mt-1">Track and monitor every purchases</p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}

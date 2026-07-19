@@ -45,7 +45,7 @@ function Navbar({ user }) {
                         Users
                       </Link>
                       <Link to="/admin/purchase-history" className="text-gray-400 hover:text-white transition-colors duration-200 hidden sm:block">
-                        📜 Purchase History
+                        Purchase History
                       </Link>
                     </>
                   )}
