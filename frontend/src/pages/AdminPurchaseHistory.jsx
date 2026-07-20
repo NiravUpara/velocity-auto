@@ -16,10 +16,10 @@ function AdminPurchaseHistory() {
   const [sortBy, setSortBy] = useState('date-desc'); // date-desc, date-asc, amount-desc, amount-asc
 
   const navigate = useNavigate();
-  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token || user.role !== 'admin') {
       navigate('/login');
       return;

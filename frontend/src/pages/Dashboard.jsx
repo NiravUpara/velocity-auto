@@ -45,36 +45,46 @@ function Dashboard() {
   
   const navigate = useNavigate();
 
-  // Get user from sessionStorage
-  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  // Get user from localStorage
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const isAdmin = user.role === 'admin';
 
   // Redirect to login if no token
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
     }
   }, [navigate]);
 
+  const fetchCurrentState = async () => {
+    try {
+      if (searchQuery.trim()) {
+        const res = await searchVehicles(searchQuery);
+        setVehicles(res.data);
+      } else {
+        const res = await getVehicles();
+        setVehicles(res.data);
+      }
+    } catch (err) {
+      if (err.response?.status === 401) navigate('/login');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStats = async () => {
+    if (!isAdmin) return;
+    try {
+      const res = await getAdminStats();
+      setStats(res.data);
+    } catch (err) {
+      console.error('Failed to fetch stats', err);
+    }
+  };
+
   // Polling for real-time updates
   useEffect(() => {
-    const fetchCurrentState = async () => {
-      try {
-        if (searchQuery.trim()) {
-          const res = await searchVehicles(searchQuery);
-          setVehicles(res.data);
-        } else {
-          const res = await getVehicles();
-          setVehicles(res.data);
-        }
-      } catch (err) {
-        if (err.response?.status === 401) navigate('/login');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCurrentState();
 
     const interval = setInterval(() => {
@@ -87,14 +97,6 @@ function Dashboard() {
   // Fetch admin stats
   useEffect(() => {
     if (isAdmin) {
-      const fetchStats = async () => {
-        try {
-          const res = await getAdminStats();
-          setStats(res.data);
-        } catch (err) {
-          console.error('Failed to fetch stats', err);
-        }
-      };
       fetchStats();
       const interval = setInterval(fetchStats, 10000);
       return () => clearInterval(interval);
@@ -119,6 +121,8 @@ function Dashboard() {
       setMessage({ text: 'Purchase successful! 🎉', type: 'success' });
       setPurchasingVehicle(null);
       setViewingVehicle(null);
+      fetchCurrentState();
+      if (isAdmin) fetchStats();
     } catch (err) {
       setMessage({ text: err.response?.data?.error || 'Purchase failed', type: 'error' });
     }
@@ -129,6 +133,8 @@ function Dashboard() {
       await createVehicle(vehicleData);
       setMessage({ text: 'Vehicle added successfully!', type: 'success' });
       setShowAddForm(false);
+      fetchCurrentState();
+      if (isAdmin) fetchStats();
     } catch (err) {
       setMessage({ text: err.response?.data?.error || 'Failed to add vehicle', type: 'error' });
     }
@@ -139,6 +145,7 @@ function Dashboard() {
       await updateVehicle(id, vehicleData);
       setMessage({ text: 'Vehicle updated successfully!', type: 'success' });
       setEditingVehicle(null);
+      fetchCurrentState();
     } catch (err) {
       setMessage({ text: err.response?.data?.error || 'Failed to update vehicle', type: 'error' });
     }
@@ -153,6 +160,8 @@ function Dashboard() {
     try {
       await deleteVehicle(vehicleToDelete);
       setMessage({ text: 'Vehicle deleted successfully!', type: 'success' });
+      fetchCurrentState();
+      if (isAdmin) fetchStats();
     } catch (err) {
       setMessage({ text: err.response?.data?.error || 'Delete failed', type: 'error' });
     }
@@ -164,6 +173,7 @@ function Dashboard() {
       await restockVehicle(id, quantity);
       setMessage({ text: 'Vehicle restocked successfully!', type: 'success' });
       setRestockingVehicle(null);
+      fetchCurrentState();
     } catch (err) {
       setMessage({ text: err.response?.data?.error || 'Failed to restock vehicle', type: 'error' });
     }

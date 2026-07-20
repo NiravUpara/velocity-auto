@@ -19,9 +19,9 @@ function Login() {
     try {
       const res = await loginUser(username, password);
 
-      // Store token and user info in sessionStorage
-      sessionStorage.setItem('token', res.data.token);
-      sessionStorage.setItem('user', JSON.stringify(res.data.user));
+      // Store token and user info in localStorage
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
 
       navigate('/dashboard');
     } catch (err) {

@@ -10,10 +10,10 @@ function MyGarage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
       return;

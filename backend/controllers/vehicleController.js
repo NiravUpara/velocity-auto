@@ -60,9 +60,27 @@ function create(req, res) {
       return res.status(400).json({ error: 'Quantity cannot be negative' });
     }
 
+    // Check if an identical vehicle already exists
+    const existingVehicles = getAllVehicles();
+    const duplicate = existingVehicles.find(v => 
+      v.make.toLowerCase() === make.toLowerCase() && 
+      v.model.toLowerCase() === model.toLowerCase() && 
+      v.category.toLowerCase() === category.toLowerCase()
+    );
+
+    if (duplicate) {
+      const updated = updateVehicle(duplicate.id, {
+        quantity: duplicate.quantity + Number(quantity),
+        price: Number(price), // update to new price if changed
+        description: description || duplicate.description
+      });
+      return res.status(200).json(updated);
+    }
+
     const vehicle = createVehicle(make, model, category, price, quantity, description);
     res.status(201).json(vehicle);
   } catch (error) {
+    console.error('Failed to create vehicle:', error);
     res.status(500).json({ error: 'Failed to create vehicle' });
   }
 }
