@@ -262,7 +262,7 @@ function Dashboard() {
 
         {/* Admin Stats Cards */}
         {isAdmin && stats && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-4 mb-10">
             {statCards.map((stat) => (
               <div key={stat.label} className="bg-velocity-surface/50 border border-white/10 rounded-xl p-5 hover:border-white/10 transition-colors">
                 <p className="text-xs text-gray-400 uppercase tracking-wider font-orbitron mb-2">{stat.label}</p>
@@ -294,7 +294,7 @@ function Dashboard() {
         )}
 
         {/* Search Bar */}
-        <div className="mb-4">
+        <div className="mb-6 md:mb-4">
           <input
             type="text"
             value={searchQuery}

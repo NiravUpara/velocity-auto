@@ -1,8 +1,10 @@
 import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
 
 function Navbar({ user }) {
   const navigate = useNavigate();
   const isAdmin = user?.role === 'admin';
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
 
   const handleLogout = () => {
@@ -22,8 +24,21 @@ function Navbar({ user }) {
             </span>
           </Link>
 
-          {/* User Info & Actions */}
-          <div className="flex items-center gap-6">
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white hover:text-velocity-red p-2 focus:outline-none">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Desktop User Info & Actions */}
+          <div className="hidden md:flex items-center gap-6">
 
 
             <Link to="/dashboard" className="text-gray-400 hover:text-white font-medium transition-colors hidden sm:block">
@@ -71,6 +86,47 @@ function Navbar({ user }) {
           </div>
         </div>
       </div>
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-velocity-bg/95 backdrop-blur-md border-b border-white/10 absolute top-20 left-0 w-full px-4 py-6 flex flex-col gap-4 shadow-2xl">
+          <Link to="/dashboard" onClick={() => setIsMenuOpen(false)} className="text-gray-400 hover:text-white font-medium py-2">
+            {isAdmin ? 'Dashboard' : 'Premium Collection'}
+          </Link>
+          {user ? (
+            <>
+              {!isAdmin && (
+                <Link to="/garage" onClick={() => setIsMenuOpen(false)} className="text-gray-400 hover:text-white font-medium py-2">
+                  My Garage
+                </Link>
+              )}
+              {isAdmin && (
+                <>
+                  <Link to="/admin/users" onClick={() => setIsMenuOpen(false)} className="text-gray-400 hover:text-white font-medium py-2">
+                    Users
+                  </Link>
+                  <Link to="/admin/purchase-history" onClick={() => setIsMenuOpen(false)} className="text-gray-400 hover:text-white font-medium py-2">
+                    Purchase History
+                  </Link>
+                </>
+              )}
+              <div className="border-t border-white/10 pt-4 mt-2">
+                <p className="text-white text-sm font-medium mb-1">{user?.username}</p>
+                <p className="text-xs text-velocity-red font-orbitron uppercase tracking-widest mb-4">{user?.role}</p>
+                <button
+                  onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                  className="w-full px-5 py-3 bg-transparent border border-white/10 hover:border-velocity-red text-white hover:text-velocity-red rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </>
+          ) : (
+            <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-white font-bold uppercase tracking-wider text-sm hover:text-velocity-red transition-colors block py-2">
+              Sign In
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

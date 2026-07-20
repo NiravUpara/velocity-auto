@@ -47,11 +47,11 @@ function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen lg:h-screen flex items-center justify-center overflow-hidden">
         {/* Background Gradients */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-velocity-surface/50 via-velocity-bg to-velocity-bg z-0"></div>
         
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between pt-20">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between pt-32 pb-20 md:pt-20 md:pb-0">
           
           {/* Text Content */}
           <motion.div 
@@ -69,10 +69,10 @@ function Landing() {
               Engineered For Every Journey. Discover a curated collection of premium performance vehicles designed to exceed expectations.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link to="/login" className="w-full sm:w-auto text-center bg-blue-600 text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-blue-700 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1">
+              <Link to="/login" className="w-full sm:w-auto text-center bg-blue-600 text-white px-6 py-3 text-sm md:text-base md:px-8 md:py-4 rounded-full font-bold uppercase tracking-wider hover:bg-blue-700 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1">
                 View Inventory
               </Link>
-              <Link to="/register" className="w-full sm:w-auto text-center border border-white/20 hover:border-white/50 text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider backdrop-blur-sm transition-all hover:-translate-y-1">
+              <Link to="/register" className="w-full sm:w-auto text-center border border-white/20 hover:border-white/50 text-white px-6 py-3 text-sm md:text-base md:px-8 md:py-4 rounded-full font-bold uppercase tracking-wider backdrop-blur-sm transition-all hover:-translate-y-1">
                 Become a Member
               </Link>
             </motion.div>

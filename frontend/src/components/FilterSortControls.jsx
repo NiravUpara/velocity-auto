@@ -18,7 +18,7 @@ function FilterSortControls({ makes, selectedMakes, onMakeChange, categories, se
   };
 
   return (
-    <div className="bg-velocity-surface/50 border border-white/10 rounded-xl p-6 mb-10 flex flex-col lg:flex-row gap-8 backdrop-blur-sm">
+    <div className="bg-velocity-surface/50 border border-white/10 rounded-xl p-6 mb-10 flex flex-col lg:flex-row gap-6 lg:gap-8 backdrop-blur-sm">
       
       {/* Make Filter */}
       <div className="flex-1">
