@@ -77,7 +77,7 @@ function Register() {
         <div className="text-center mb-10">
           <Link to="/" className="inline-block hover:opacity-80 transition-opacity mb-6">
             <span className="font-orbitron font-bold text-3xl tracking-wider text-white">
-              VELOCITY<span className="text-blue-600">AUTO</span>
+              VELOCITY<span className="text-velocity-red">AUTO</span>
             </span>
           </Link>
           <h1 className="text-2xl font-bold text-white mb-2 font-orbitron">Join The Club</h1>
