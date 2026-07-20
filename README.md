@@ -173,12 +173,13 @@ The `purchases` table acts as a permanent historical record. It is strictly **im
 
 ## Screenshots
 
-*(Placeholders for future screenshots)*
-- `[Screenshot: Landing Page]`
-- `[Screenshot: Customer Dashboard]`
-- `[Screenshot: User Garage]`
-- `[Screenshot: Admin Inventory Management]`
-- `[Screenshot: Admin Purchase History Ledger]`
+<img width="1919" height="971" alt="image" src="https://github.com/user-attachments/assets/d56b4e3c-2e7e-4d1c-a06c-a2fb220ddf9d" />
+<img width="1916" height="968" alt="image" src="https://github.com/user-attachments/assets/3fe4323b-bc3e-4995-b600-ac9ad2485a4c" />
+<img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/31b3f31f-c3f4-4930-b224-c19adf1d686c" />
+<img width="1919" height="970" alt="image" src="https://github.com/user-attachments/assets/d525415f-da55-4385-ac1c-b0a7296026ad" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/be3e9bfd-09ba-4f7f-9b8c-1551d82600a3" />
+<img width="1919" height="966" alt="image" src="https://github.com/user-attachments/assets/44f9239a-ef51-4c82-9833-858ab7c41abd" />
+<img width="1913" height="962" alt="image" src="https://github.com/user-attachments/assets/1dc11297-7ba4-449b-9920-1cc4e29585d5" />
 
 ## Future Improvements
 
