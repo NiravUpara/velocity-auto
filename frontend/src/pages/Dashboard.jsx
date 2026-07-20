@@ -45,13 +45,13 @@ function Dashboard() {
   
   const navigate = useNavigate();
 
-  // Get user from localStorage
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  // Get user from sessionStorage
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   const isAdmin = user.role === 'admin';
 
   // Redirect to login if no token
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) {
       navigate('/login');
     }

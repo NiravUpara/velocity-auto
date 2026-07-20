@@ -13,10 +13,10 @@ function AdminUsers() {
   const [message, setMessage] = useState({ text: '', type: '' });
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token || user.role !== 'admin') {
       navigate('/login');
       return;
