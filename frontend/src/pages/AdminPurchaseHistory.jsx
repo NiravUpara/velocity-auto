@@ -25,6 +25,12 @@ function AdminPurchaseHistory() {
       return;
     }
     fetchHistory();
+
+    const intervalId = setInterval(() => {
+      fetchHistory();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   }, [navigate]);
 
   const fetchHistory = async () => {
